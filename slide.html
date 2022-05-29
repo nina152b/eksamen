@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="da">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styleslide.css" />
+    <link rel="stylesheet" href="https://use.typekit.net/pra1vym.css">
+    <link rel="stylesheet" href="https://use.typekit.net/pra1vym.css">
+    <!-- Nunito font   -->
+    <link rel="stylesheet" href="https://use.typekit.net/pra1vym.css">
+    <title>Inspiration</title>
+  </head>
+  <body>
+    <main>
+      <section id="afsnit_tips">
+        <div id="baggrund_boks"></div>
+        <div id="menu-menu" class="slider-container">
+          <div class="slide"><h1 class="tipMitem1">Prioriter at have en morgen praksis. Stå gerne lidt tidligere op, tidligere end resten af familien, så du starter dagen stille og roligt med egen tid</h1></div>
+          <div class="slide"><h1 class="tipMitem2">Det første du indtager er vigtigt. Bryg en dejlig kop the eller lav et glas frisk vand med citron. Det er godt for kroppen og kan virke udrensende</h1></div>
+          <div class="slide"><h1 class="tipMitem3">Kickstart kroppen. Lav en let krop øvelse, yogaøvelser nakke og skuldre øvelser eller en morgenmeditation </h1></div>
+          <div class="slide"><h1 class="tipMitem4">Planlæg din dag. Afsæt minimum 15 min. til at planlægge dine gøremål, arbejdsopgaver, men også gerne tidsrum til dig selv</h1></div>
+          <div class="slide"><h1 class="tipMitem5">Afslut dagen godt. Luk ned for online medier, TV og andet i god tid. Hav en aften rutine, yoga øvelse, hudpleje, stille musik og meditation</h1></div>
+          <div class="slide"><h1 class="tipMitem6">Selvomsorg og refleksion. Sørg for at der i din planlægning er afsat tid til dig: motion, frisk luft, meditation, og refleksionstid</h1></div>
+            </div> 
+      </section>
+
+    <script>
+
+        //* ---------- Mobil slider ---------- //
+/*Link Til Youtube Tutorial: https://youtu.be/5bxFSOA5JYo */
+
+/* her slider man igennem alle tipsene i slide-containeren og i .slide findes tipsene i tekst form */
+const slider = document.querySelector(".slider-container"),
+  slides = Array.from(document.querySelectorAll(".slide"));
+
+let isDragging = false,
+  startPos = 0,
+  currentTranslate = 0,
+  prevTranslate = 0,
+  animationID = 0,
+  currentIndex = 0;
+
+/* her slider man de forskellige tips igennem og det der ændrer sig, er h1 */
+slides.forEach((slide, index) => {
+  const slideImage = slide.querySelector("h1");
+  slideImage.addEventListener("dragstart", (e) => e.preventDefault());
+
+  // Touch handlingen
+  slide.addEventListener("touchstart", touchStart(index));
+  slide.addEventListener("touchend", touchEnd);
+  slide.addEventListener("touchmove", touchMove);
+
+  // Mouse handlingen
+  slide.addEventListener("mousedown", touchStart(index));
+  slide.addEventListener("mouseup", touchEnd);
+  slide.addEventListener("mouseleave", touchEnd);
+  slide.addEventListener("mousemove", touchMove);
+});
+
+// Disable context menu
+window.oncontextmenu = function (event) {
+  event.preventDefault();
+  event.stopPropagation();
+  return false;
+};
+
+function touchStart(index) {
+  return function (event) {
+    currentIndex = index;
+    startPos = getPositionX(event);
+    isDragging = true;
+
+    // https://css-tricks.com/using-requestanimationframe/
+    animationID = requestAnimationFrame(animation);
+    slider.classList.add("grabbing");
+  };
+}
+
+function touchEnd() {
+  isDragging = false;
+  cancelAnimationFrame(animationID);
+
+  const movedBy = currentTranslate - prevTranslate;
+
+  if (movedBy < -100 && currentIndex < slides.length - 1) currentIndex += 1;
+
+  if (movedBy > 100 && currentIndex > 0) currentIndex -= 1;
+
+  setPositionByIndex();
+
+  slider.classList.remove("grabbing");
+}
+
+function touchMove(event) {
+  if (isDragging) {
+    const currentPosition = getPositionX(event);
+    currentTranslate = prevTranslate + currentPosition - startPos;
+  }
+}
+
+function getPositionX(event) {
+  return event.type.includes("mouse") ? event.pageX : event.touches[0].clientX;
+}
+
+function animation() {
+  setSliderPosition();
+  if (isDragging) requestAnimationFrame(animation);
+}
+
+function setSliderPosition() {
+  slider.style.transform = `translateX(${currentTranslate}px)`;
+}
+
+function setPositionByIndex() {
+  currentTranslate = currentIndex * -window.innerWidth;
+  prevTranslate = currentTranslate;
+  setSliderPosition();
+}
+
+//* ---------- Observer(Tjekker om element kan ses på skærmen) ---------- //
+
+// Variabler fra html siden, hvor .menuMitem er de tipsene der kommer til at stå på siden //
+const tip1 = document.querySelector(".tipMitem1");
+const tip2 = document.querySelector(".tipMitem2");
+const tip3 = document.querySelector(".tipMitem3");
+const tip4 = document.querySelector(".tipMitem4");
+const tip5 = document.querySelector(".tipMitem5");
+const tip6 = document.querySelector(".tipMitem6");
+
+//* Observer 1 ///
+
+// en varible der starter en arrow funtion. Den opretter en "new IntersectionObserver" som tjekker om vores element".text3"
+// kan ses i vores Viewport.
+
+// entries is an array of IntersectionObserverEntry objects. Each such object represents information about a given target's intersection with the root. i dette tilfælde vores element.
+let observer1 = new IntersectionObserver(
+  function (entries) {
+    // if function der tjekker om "entries" rammmer root. [0] er placeret som en threshold på "0" da en treshold på 1 ikke kan garanteres på alle browers
+    if (entries[0].isIntersecting === true) {
+      console.log("Prioriter at have en morgen praksis", this);
+      // Tilføjer eller fjerner en klasse
+      tippet1.classList.remove("hide");
+      tippet2.classList.add("hide");
+      tippet3.classList.add("hide");
+      tippet4.classList.add("hide");
+      tippet5.classList.add("hide");
+      tippet6.classList.add("hide");
+    }
+  },
+  //Her kan vi i stedet skrive vores threshold på hvor meget af elementet kan ses på siden inden vores if statement starter. skala fra (0-1)
+  { threshold: [0.5] }
+);
+// observerer det valgt element i.e ".text3". Den skal står efter vores "new IntersectionObserver"
+observer1.observe(tippet1);
+
+//* Observer 2 ///
+
+let observer2 = new IntersectionObserver(
+  function (entries) {
+    if (entries[0].isIntersecting === true) {
+      console.log("Det første du indtager er vigtigt", this);
+      tippet1.classList.add("hide");
+      tippet2.classList.remove("hide");
+      tippet3.classList.add("hide");
+      tippet4.classList.add("hide");
+      tippet5.classList.add("hide");
+      tippet6.classList.add("hide");
+    }
+  },
+  { threshold: [1] }
+);
+observer2.observe(tippet2);
+
+//* Observer 3 ///
+
+let observer3 = new IntersectionObserver(
+  (entries) => {
+    if (entries[0].isIntersecting === true) {
+      console.log("Kickstart kroppen", this);
+      tippet1.classList.add("hide");
+      tippet2.classList.add("hide");
+      tippet3.classList.remove("hide");
+      tippet4.classList.add("hide");
+      tippet5.classList.add("hide");
+      tippet6.classList.add("hide");
+    }
+  },
+  { threshold: [1] }
+);
+observer3.observe(tippet3);
+
+//* Observer 4 ///
+
+let observer4 = new IntersectionObserver(
+  (entries) => {
+    if (entries[0].isIntersecting === true) {
+      console.log("Planlæg din dag", this);
+      tippet1.classList.add("hide");
+      tippet2.classList.add("hide");
+      tippet3.classList.add("hide");
+      tippet4.classList.remove("hide");
+      tippet5.classList.add("hide");
+      tippet6.classList.add("hide");
+    }
+  },
+  { threshold: [1] }
+);
+observer4.observe(tippet4);
+
+//* Observer 5 ///
+
+let observer5 = new IntersectionObserver(
+  (entries) => {
+    if (entries[0].isIntersecting === true) {
+      console.log("Afslut dagen godt", this);
+      tippet1.classList.add("hide");
+      tippet2.classList.add("hide");
+      tippet3.classList.add("hide");
+      tippet4.classList.add("hide");
+      tippet5.classList.remove("hide");
+      tippet6.classList.add("hide");
+    }
+  },
+  { threshold: [1] }
+);
+observer5.observe(tippet5);
+
+//* Observer 6 ///
+
+let observer6 = new IntersectionObserver(
+  (entries) => {
+    if (entries[0].isIntersecting === true) {
+      console.log("Selvomsorg og refleksion", this);
+      tippet1.classList.add("hide");
+      tippet2.classList.add("hide");
+      tippet3.classList.add("hide");
+      tippet4.classList.add("hide");
+      tippet5.classList.add("hide");
+      tippet6.classList.remove("hide");
+    }
+  },
+  { threshold: [1] }
+);
+observer6.observe(tippet6);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+/** ---------- Mobile View START ---------- */
+@media (max-width: 600px) {
+  /* boksen som ligger sig bag tipsene */
+  #baggrund_boks {
+    position: fixed;
+    width: 100vw;
+    height: 150px;
+    bottom: 0%;
+    /* background-color: #e8e9e0; */
+  }
+
+  /* Slider CSS  */
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* css styling for tipsene */
+  html,
+  h1 {
+    font-family: nunito, sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    height: 150%;
+    width: 65%;
+    overflow: hidden;
+    line-height: 1.8;
+    font-size: 0.9rem;
+  }
+
+  /* det er den div som indeholder alle tipsene */
+  .slider-container {
+    position: fixed;
+    height: 80px;
+    display: inline-flex;
+    overflow: hidden;
+    transform: translateX(0);
+    transition: transform 0.3s ease-out;
+    cursor: grab;
+    bottom: 0px;
+    padding-bottom: 30px;
+  }
+
+  /* det er den div hvor teksten til tilpsene er */
+  .slide {
+    max-height: 100px;
+    width: 95vw;
+    display: flex;
+    justify-content: center;
+    user-select: none;
+    margin: 5px;
+    padding: 5px;
+  }
+
+  /* Ændrer på tekstens størrelse, når man tager fat på tippet - her gør vi den lidt mindre for at markere, at man tager fat på den */
+  .grabbing .slide h1 {
+    transform: scale(1);
+  }
+}
